@@ -1,13 +1,18 @@
 package aula8.proyecto.petanias.pestanias;
 
-import android.app.Fragment;
-import android.content.res.Resources;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xavier on 24/06/16.
@@ -15,17 +20,39 @@ import android.widget.TextView;
 public class FragmentConectados extends android.support.v4.app.Fragment
 {
     private View rootView;
-    private TextView text;
+    private Activity activity;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter<Adaptador.AdaptadorViewHolder> adapter;
+    private RecyclerView.LayoutManager lManager;
+
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+        activity = (Activity) context;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        rootView = inflater.inflate(R.layout.fragmento2, container, false);
-        text = (TextView) rootView.findViewById(R.id.text2);
+        rootView = inflater.inflate(R.layout.fragmento_conectados, container, false);
+        //Se inicializan los usuarios
+        List items = new ArrayList<>();
 
-        Resources res = getResources();
+        items.add(new Usuario(R.drawable.foto1,"Isrrael Maita", "isrrael@correo.com"));
+        items.add(new Usuario(R.drawable.foto1,"Xavier Moreno", "xavier@correo.com"));
+        items.add(new Usuario(R.drawable.foto1,"Acilio Simoes", "acilio@correo.com"));
 
-        text.setText(res.getText(R.string.pes2String));
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.reciclador);
+        recyclerView.setHasFixedSize(true);
+
+        lManager = new LinearLayoutManager(activity);
+        recyclerView.setLayoutManager(lManager);
+
+        adapter = new Adaptador(items);
+        recyclerView.setAdapter(adapter);
+
 
         return rootView;
     }
